@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<head>
+    <meta charset="utf-8">
+    <title>Shoe rack</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="../admin/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="../admin/css/main.css" rel="stylesheet" type="text/css" />
+    <link href= "https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+</head>
+<body class="text-center">
+    <%- include('../adminLayouts/adminNav.ejs') %>	
+
+    <form action="/admin/postBanner" method="post" enctype="multipart/form-data" id="myform">
+        <section class="content-main">
+        
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Banner</h2>
+                        <div>
+                            <input class="btn btn-primary" value="Submit" type="submit"></input>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <!-- <div class="col-md-3">
+                                    <h6>1. General info</h6>
+                                </div> -->
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Banner title</label>
+                                        <input type="text" placeholder="Type here" class="form-control" name="title" id="name" required >
+                                    </div>
+                                    <span id="title-error"></span>
+                                    <div class="mb-4">
+                                        <label class="form-label">Link</label>
+                                        <input placeholder="Type here" class="form-control" rows="4" name="link" id="description" required>
+                                    </div>
+                                    <span id="description-error"></span>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                           <!-- row.// -->
+                            
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <!-- <div class="col-md-3">
+                                    <h6>4. Media</h6>
+                                </div> -->
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Main Image</label>
+                                        <input class="form-control" type="file" name="image" required>
+                                    </div>
+                                </div>
+                         <!-- col.// -->
+                            </div> <!-- .row end// -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </form>
+        <p><%=(typeof message!=='undefined')?message:""%></p>
+        </section> <!-- content-main end// -->
+
+    </main>
+
+    <script>
+        document.getElementById('bannerForm').addEventListener('submit', async function (event) {
+          event.preventDefault();
+        
+          const formData = new FormData(this);
+        
+          try {
+            const response = await fetch('/addBanner', {
+              method: 'POST',
+              body: formData,
+            });
+        
+            if (response.ok) {
+              const responseData = await response.json(); // Parse the JSON response
+        
+              // Show the response message to the user using Toastify or any other method
+              Toastify({
+                text: responseData.message, // Use the message from the response
+                duration: 5000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "green",
+              }).showToast();
+        
+              // You might want to redirect the user to a different page or update UI after success
+              // window.location.href = '/successPage';
+            } else {
+              const errorText = await response.text();
+              console.error(`Error: ${errorText}`);
+            }
+          } catch (error) {
+            console.error(`Fetch error: ${error.message}`);
+          }
+        });
+        </script>
+    
+    
+
+    <script src="../admin/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="../admin/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="../admin/js/vendors/select2.min.js"></script>
+    <script src="../admin/js/vendors/perfect-scrollbar.js"></script>
+    <script src="../admin/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="../admin/js/main.js" type="text/javascript"></script>
+    
+</body>
+
+
+</html>
+

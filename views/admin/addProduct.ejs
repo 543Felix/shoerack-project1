@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-account-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Admin Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="../admin/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="../admin/css/main.css" rel="stylesheet" type="text/css" />
+     <!-- Template CSS -->
+     <link href="../admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+     <!-- Add Cropper.js CSS -->
+ <link rel="stylesheet" href="https://unpkg.com/cropperjs/dist/cropper.min.css">
+ 
+ <!-- Add jQuery (required by Cropper.js) -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+ <!-- Add Cropper.js -->
+ <script src="https://unpkg.com/cropperjs/dist/cropper.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/cropper.js/4.2.3/cropper.min.js"></script>
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+<style>
+  .remove-button {
+  background-color: #9cdb37;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.image-container {
+  display: inline-block;
+  margin: 10px;
+}
+</style>
+
+ 
+</head>
+
+    
+<%- include('../adminLayouts/adminNav.ejs') %>
+<body>
+<main class="main-wrap">
+    <form action="/admin/addProduct" method="post" enctype="multipart/form-data" id="myForm">
+    <!-- <section class="content-main"> -->
+    <!-- <div class="col-md-10 offset-md-1"> -->
+        <div class="row">
+            <div class="col-6">
+                <div  class="col-md-10 offset-md-1">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div>
+                        <input class="btn btn-md rounded font-sm hover-up" value="Publish" type="submit"></input>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                     <div class="card-body"> 
+                        <div class="row">
+                            <!-- <div class="col-md-3">
+                                <h6>1. General info</h6>
+                            </div> -->
+                            <div class="col-md-9">
+                                <div class="mb-4">
+                                    <label class="form-label">Product title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="name" id="name" onkeyup="nameValidation()">
+                                    <span id="nameError"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea placeholder="Type here" class="form-control" rows="4" name="description" id="description" onkeyup="descriptionValidation()"></textarea>
+                                    <span id="descriptionError"></span>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Category</label>
+                                    
+                                    <select class="form-select" name="category">
+                                        <% category.forEach(function(category) { %>
+                                        <option value="<%= category._id %>"><%= category.categoryName %>
+                                        </option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+                            </div> <!-- col.// -->
+                        </div> <!-- row.// -->
+                        <hr class="mb-4 mt-0">
+                        <div class="row">
+                            <!-- <div class="col-md-3">
+                                <h6>2. Pricing</h6>
+                            </div> -->
+                            <div class="col-md-9">
+                                <div class="mb-4">
+                                    <label class="form-label">Cost in INR</label>
+                                    <input type="number" placeholder="00.0" class="form-control" name="price" id="price" onkeyup="priceValidation()">
+                                    <span id="priceError"></span>
+                                </div>
+                                <div class="mb-4">
+                                  <label class="form-label">Stock</label>  
+                                  <input type="number" placeholder="0" class="form-control" name="stock" id="stock" onkeyup="stockValidation()">
+                                  <span id="stockError"></span>
+                              </div>
+                            </div> <!-- col.// -->
+                        </div> <!-- row.// -->
+                        
+                        <hr class="mb-4 mt-0">
+                        <div class="card mb-4">
+                          <div class="card-header">
+                            <h4>Media</h4>
+                          </div>
+                          <div class="input-upload">
+                            <div id="imgPreviewContainer"></div>
+                            <input class="form-control" id="input1" name="file" onchange="handleImageUpload(event)" type="file" multiple>
+                          </div>
+                          <div id="croppedImageContainer" style="display: none;"></div>
+                        </div>
+              </div>
+            </div>
+        </div>
+        </div>
+    </form>
+
+    <p><%=(typeof message!=='undefined')?message:""%></p>
+<!-- </div> -->
+<!-- </section> content-main end -->
+
+</main>
+
+<script>
+    const myForm = document.getElementById("myForm")
+
+
+  const name = document.getElementById("name")
+  const description = document.getElementById("description")
+  const price = document.getElementById("price")
+  const stock = document.getElementById("stock")
+
+
+  const nameError = document.getElementById("nameError")
+  const descriptionError = document.getElementById("descriptionError")
+  const priceError = document.getElementById("priceError")
+  const stockError = document.getElementById("stockError")
+
+function nameValidation(){
+const nameValue = name.value
+      if(nameValue.trim()==0){
+          nameError.innerHTML = 'Product title is required'
+          nameError.style.color = 'red'
+          name.style.border = "solid 2px red";
+          return false;
+      }
+nameError.innerHTML = ""
+      nameError.style.color = "green"
+      name.style.border = "solid 2px green";
+      return true
+  
+
+
+}
+
+
+function descriptionValidation(){
+const descriptionValue = description.value
+      if(descriptionValue.trim()==0){
+          descriptionError.innerHTML = 'Descripion is required'
+          descriptionError.style.color = 'red'
+          description.style.border = "solid 2px red";
+          return false;
+      }
+descriptionError.innerHTML = ""
+      descriptionError.style.color = "green"
+      description.style.border = "solid 2px green";
+      return true
+  
+
+
+}
+
+function priceValidation(){
+const priceValue = price.value
+      if(priceValue.trim()==0){
+          priceError.innerHTML = 'Price is Required'
+          priceError.style.color = 'red'
+          price.style.border = "solid 2px red";
+          return false;
+      }
+if(priceValue <= 0 ){
+          priceError.innerHTML = 'Price Must be greater than zero'
+          priceError.style.color = 'red'
+          price.style.border = "solid 2px red";
+          return false;
+      }
+priceError.innerHTML = ""
+      priceError.style.color = "green"
+      price.style.border = "solid 2px green";
+      return true
+  
+
+
+}
+
+
+function stockValidation(){
+const stockValue = stock.value
+      if(stockValue.trim()==0){
+          stockError.innerHTML = 'Stock is Required'
+          stockError.style.color = 'red'
+          stock.style.border = "solid 2px red";
+          return false;
+      }
+if(stockValue <  0 ){
+          stockError.innerHTML = 'Stock Must be greater than or equal to zero'
+          stockError.style.color = 'red'
+          stock.style.border = "solid 2px red";
+          return false;
+      }
+stockError.innerHTML = ""
+      stockError.style.color = "green"
+      stock.style.border = "solid 2px green";
+      return true
+  
+
+
+}
+
+
+
+
+
+
+
+
+
+
+myForm.addEventListener("submit",(event)=>{
+      event.preventDefault();
+      if(!nameValidation() || !descriptionValidation() || ! priceValidation()) {
+          return false
+      }else{
+          myForm.submit()
+      }
+
+  })
+
+
+
+
+</script>
+<script>
+function handleImageUpload(event) {
+  const images = event.target.files;
+  const previewContainer = document.getElementById('imgPreviewContainer');
+
+  for (const image of images) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.classList.add('uploaded-image');
+
+      // Create a container div for the image and remove button
+      const container = document.createElement('div');
+      container.classList.add('image-container');
+
+      // Create a remove button for the image
+      const removeButton = document.createElement('button');
+      removeButton.textContent = 'Remove';
+      removeButton.classList.add('remove-button');
+      removeButton.addEventListener('click', () => {
+        previewContainer.removeChild(container);
+      });
+
+      // Append the image and the remove button to the container
+      container.appendChild(img);
+      container.appendChild(removeButton);
+
+      // Append the container to the preview container
+      previewContainer.appendChild(container);
+    };
+    reader.readAsDataURL(image);
+  }
+}
+
+
+
+container.addEventListener('click', () => {
+  const cropperContainer = container.querySelector('.cropper-container');
+  cropperContainer.style.display = 'block';
+});
+</script>
+<!-- <script>
+    function viewImage(event, index) {
+        let input = event.target;
+        let reader = new FileReader();
+    
+        reader.onload = function() {
+          let dataURL = reader.result;
+          let image = document.getElementById('imgView' + index);
+          image.src = dataURL;
+    
+          // Initialize Cropper.js on the image
+          let cropper = new Cropper(image, {
+            aspectRatio: 1 / 1, // Set the aspect ratio to 1:1 for square images
+            viewMode: 1, // Set the view mode to crop box
+            guides: true, // Show the crop guides
+            background: false, // Do not show the background behind the image
+            autoCropArea: 1, // Set the initial crop area to cover the whole image
+            zoomable: true // Disable zooming to keep the image size fixed
+          });
+    
+          // Show the image cropper container
+          let cropperContainer = document.querySelector('#croppedImg' + index).parentNode;
+          cropperContainer.style.display = 'block';
+    
+          // Update the cropped image when the "Save" button is clicked
+          let saveButton = document.querySelector('#saveButton' + index);
+          saveButton.addEventListener('click', async function() {
+            let croppedCanvas = cropper.getCroppedCanvas({
+              width: 1500, 
+              height: 1500 
+            });
+            let croppedImage = document.getElementById("croppedImg" + index);
+            croppedImage.src = croppedCanvas.toDataURL('image/jpeg', 1.0);
+    
+            // Generate a unique name for the cropped image file based on the current timestamp
+            let timestamp = new Date().getTime();
+            let fileName = `cropped-img-${timestamp}-${index}.png`;
+    
+            await croppedCanvas.toBlob(blob => {
+              let input = document.getElementById('input' + index)
+              let imgFile = new File([blob], fileName, blob)
+              const fileList = new DataTransfer();
+              fileList.items.add(imgFile);
+              input.files = fileList.files
+            });
+            // cropperContainer.style.display = 'none';
+          });
+    
+        };
+    
+        reader.readAsDataURL(input.files[0]);
+      }
+    </script> -->
+
+   
+
+    
+    <%- include('../adminLayouts/footer.ejs') %>

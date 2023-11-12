@@ -1,0 +1,75 @@
+<%- include('../adminLayouts/header.ejs') %>
+<%- include('../adminLayouts/adminNav.ejs') %>
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Categories </h2>
+                </div>
+                <div>
+                    <a href="/admin/addCategory" class="btn btn-primary btn-sm rounded">Create new</a>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </th> -->
+                                            <th>categoryName</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% categories.forEach(category => { %>
+                                        <tr>
+                                            <!-- <td class="text-center">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" />
+                                                </div>
+                                            </td> -->
+                                            <td title="<%=category.categoryName %>"><b><%=category.categoryName %></b></td>
+                                            <td title="<%=category.description %>"><%=category.description %></td>
+                                            <td><% if(category.isListed == true){%>
+                                                <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                                    <span class="badge rounded-pill alert-success">Active</span>
+                                                </div>
+                                           <%}else{%>
+                                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                                <span class="badge rounded-pill alert-warning">Unlisted</span>
+                                            </div>
+                                            <%}%>
+                                        </td>
+                                            <td class="text-end">
+                                                <div class="dropdown">
+                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="/admin/updateCategory?id=<%= category._id %>">Edit info</a>
+                                                        <%  if(category.isListed == true){ %>
+                                                        <a class="dropdown-item text-danger" href="/admin/unlistCategory?id=<%= category._id %>">Un List</a>
+                                                        <% }else{ %>
+                                                            <a class="dropdown-item text-danger" href="/admin/relistCategory?id=<%= category._id %>">reLlist</a> 
+                                                            <% } %> 
+                                                    </div>
+                                                </div> <!-- dropdown //end -->
+                                            </td>
+                                        </tr>
+                                   <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> <!-- .col// -->
+                    </div> <!-- .row // -->
+                </div> <!-- card body .// -->
+            </div> <!-- card .// -->
+        </section> <!-- content-main end// -->
+    </main>
+   <%- include('../adminLayouts/footer.ejs') %>

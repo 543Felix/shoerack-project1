@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!-- Mobile Specific Meta -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Favicon-->
+	<link rel="shortcut icon" href="../users/img/fav.png">
+	<!-- Author Meta -->
+	<meta name="author" content="CodePixar">
+	<!-- Meta Description -->
+	<meta name="description" content="">
+	<!-- Meta Keyword -->
+	<meta name="keywords" content="">
+	<!-- meta character set -->
+	<meta charset="UTF-8">
+	<!-- Site Title -->
+	<title>Shoe Rack</title>
+	<!--
+		CSS
+		============================================= -->
+	<link rel="stylesheet" href="../users/css/linearicons.css">
+	<link rel="stylesheet" href="../users/css/font-awesome.min.css">
+	<link rel="stylesheet" href="../users/css/themify-icons.css">
+	<link rel="stylesheet" href="../users/css/bootstrap.css">
+	<link rel="stylesheet" href="../users/css/owl.carousel.css">
+	<link rel="stylesheet" href="../users/css/nice-select.css">
+	<link rel="stylesheet" href="../users/css/nouislider.min.css">
+	<link rel="stylesheet" href="../users/css/ion.rangeSlider.css" />
+	<link rel="stylesheet" href="../users/css/ion.rangeSlider.skinFlat.css" />
+	<link rel="stylesheet" href="../users/css/magnific-popup.css">
+	<link rel="stylesheet" href="../users/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+		<style>
+    .login_form {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+    }
+
+    .error {
+        color: red;
+        font-size: 12px;
+    }
+
+    .primary-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<%- include('../layouts/header.ejs') %>
+<br>
+<br>
+<br>
+<div class="col-lg-12">
+    <div class="login_form_inner">
+        <h3>Create an account</h3>
+        <% if (typeof message !== 'undefined') { %>
+            <h4 style="color: red;"><%= message %></h4>
+          <% } %>
+
+        <style>
+            .error {
+                color: red;
+            }
+        </style>
+        
+        <form class="row login_form" action="/registration" method="post" id="myForm" >
+            <div class="col-md-12 form-group">
+                <input type="text" class="form-control" id="firstname" name="firstName" placeholder="Enter Firstname" onkeyup="fnameValidation()">
+                <span id="firstnameError" class="error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" class="form-control" id="lastname" name="lastName" placeholder="Enter Lastname" onkeyup="lnameValidation()">
+                <span id="lastnameError" class="error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email"  onkeyup="emailValidation()">
+                <span id="emailError" class="error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="text" class="form-control" id="mobile" name="mobile" placeholder="Enter mobile number" onkeyup="mnoValidation()">
+                <span id="mobileError" class="error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" onkeyup="passwordValidation()">
+                <span id="passwordError" class="error"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <input type="password" class="form-control" id="confirmpassword" name="confirmpassword" placeholder="Confirm your Password" onkeyup="confPasswordValidation()">
+                <span id="confirmpasswordError" class="error"></span>
+            </div>
+			<div class="col-md-12 form-group">
+				<input type="radio" id="hasReferral" onclick="toggleReferralField()"> I have a Referral Code
+			</div>
+			<div class="col-md-12 form-group" id="referralField" style="display:none;">
+				<input type="text" class="form-control" id="referralcode" name="referralcode" placeholder="Enter Referral Code">
+				<span id="referralcodeError" class="error"></span>
+			</div>			
+            <div class="col-md-12 form-group">
+                <button type="submit" value="Register" class="primary-btn">Create an account</button>
+            </div>
+        </form>
+        
+             
+    </div>
+</div>
+
+<%- include('../layouts/footer.ejs')%>
+<script src="../users/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+	 crossorigin="anonymous"></script>
+	<script src="../users/js/vendor/bootstrap.min.js"></script>
+	<script src="../users/js/jquery.ajaxchimp.min.js"></script>
+	<script src="../users/js/jquery.nice-select.min.js"></script>
+	<script src="../users/js/jquery.sticky.js"></script>
+	<script src="../users/js/nouislider.min.js"></script>
+	<script src="../users/js/jquery.magnific-popup.min.js"></script>
+	<script src="../users/js/owl.carousel.min.js"></script>
+	<!--gmaps Js-->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+	<script src="../users/js/gmaps.min.js"></script>
+	<script src="../users/js/main.js"></script>
+
+    <script>
+		const myForm = document.getElementById("myForm")
+  
+
+		const fname = document.getElementById("firstname")
+		const lname = document.getElementById("lastname")
+		const email = document.getElementById("email")
+		const mno = document.getElementById("mobile")
+		const password = document.getElementById("password")
+		const confPassword = document.getElementById("confirmpassword")
+
+
+		
+
+		const fnameError = document.getElementById("firstnameError")
+		const lnameError = document.getElementById("lastnameError")
+		const mnoError = document.getElementById("mobileError")
+		const emailError = document.getElementById("emailError")
+		const passwordError = document.getElementById("passwordError")
+		const confPasswordError = document.getElementById("confirmpasswordError")
+
+
+
+
+
+
+		const nameRegex = /^[A-Za-z]+$/;
+
+
+		function fnameValidation(){
+			const fnameValue = fname.value
+			if(fnameValue.trim()==0){
+				fnameError.innerHTML = 'First Name is required'
+				fnameError.style.color = 'red'
+				fname.style.border = "solid 2px red";
+				return false;
+			}
+
+			if(!fnameValue.match(nameRegex)){
+				fnameError.innerHTML = 'First Name is not Valid'
+				fnameError.style.color = 'red'
+				fname.style.border = "solid 2px red";
+				return false;
+			}
+
+
+
+			fnameError.innerHTML = ""
+			fnameError.style.color = "green"
+			fname.style.border = "solid 2px green";
+			return true
+		}
+
+		function lnameValidation(){
+			const lnameValue = lname.value
+			if(lnameValue.trim()==0){
+				lnameError.innerHTML = 'First Name is required'
+				lnameError.style.color = 'red'
+				lname.style.border = "solid 2px red";
+				return false;
+			}
+
+			if(!lnameValue.match(nameRegex)){
+				lnameError.innerHTML = 'First Name is not Valid'
+				lnameError.style.color = 'red'
+				lname.style.border = "solid 2px red";
+				return false;
+			}
+
+
+
+			lnameError.innerHTML = ""
+			lnameError.style.color = "green"
+			lname.style.border = "solid 2px green";
+			return true
+		
+		}
+
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+		function emailValidation(){
+			const emailValue = email.value
+			if(!emailValue.match(emailRegex)){
+				emailError.innerHTML = 'Email not valid'
+				emailError.style.color = 'red'
+				email.style.border = "solid 2px red";
+				return false;
+			}
+			emailError.innerHTML = ""
+			emailError.style.color = "green"
+			email.style.border = "solid 2px green";
+			return true
+		}
+
+
+
+
+		const mobileRegex =  /^\d{10}$/
+		function mnoValidation(){
+			const mnoValue = mno.value
+			if(!mnoValue.match(mobileRegex)){
+				mnoError.innerHTML = 'Mobile Number not valid'
+				mnoError.style.color = 'red'
+				mno.style.border = "solid 2px red";
+				return false;
+			}
+			mnoError.innerHTML = ""
+			mnoError.style.color = "green"
+			mno.style.border = "solid 2px green";
+			return true
+		}
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{4,}$/;
+		function passwordValidation(){
+			const passwordValue = password.value
+			if(!passwordValue.match(passwordRegex)){
+				passwordError.innerHTML = 'Password should contain atleast 4 characters 1 number and a special character'
+				passwordError.style.color = 'red'
+				password.style.border = "solid 2px red";
+				return false;
+			}
+			passwordError.innerHTML = ""
+			passwordError.style.color = "green"
+			password.style.border = "solid 2px green";
+			return true
+		}
+
+		function confPasswordValidation(){
+			const passwordValue = password.value
+			const confPasswordValue = confirmpassword.value
+			if(passwordValue !== confPasswordValue){
+				console.log(confPasswordValue);
+				confirmpasswordError.innerHTML = 'Password and Confirm Password should be same'
+				confirmpasswordError.style.color = 'red'
+				confirmpassword.style.border = "solid 2px red";
+				return false;
+			}
+			confirmpasswordError.innerHTML = ""
+			confirmpasswordError.style.color = "green"
+			confirmpassword.style.border = "solid 2px green";
+			return true
+		}
+
+
+		
+
+
+
+
+
+
+
+
+		myForm.addEventListener("submit",(event)=>{
+			event.preventDefault();
+			if(!fnameValidation() || !lnameValidation() ||  !emailValidation() ||!mnoValidation() || !passwordValidation() || !confPasswordValidation()) {
+				return false
+			}else{
+				myForm.submit()
+			}
+
+		})
+
+
+		
+
+
+
+
+
+
+
+	</script>
+	<script>
+		function toggleReferralField() {
+			var referralField = document.getElementById("referralField");
+			referralField.style.display = (document.getElementById("hasReferral").checked) ? "block" : "none";
+		}
+	</script>
+	
+</body>
+</html> 
