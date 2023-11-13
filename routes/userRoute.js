@@ -40,39 +40,39 @@ user_route.get('/product',productController.singleProduct)
 //WishList
 user_route.get('/wishlist',validate.requireAuth,Block.checkBlocked,wishListController.getWishList)
 user_route.post('/addToWishlist',validate.requireAuth,Block.checkBlocked,wishListController.addToWhishlist)
-user_route.delete('/remove-product-wishlist',wishListController.removeWishList)
+user_route.delete('/remove-product-wishlist',validate.requireAuth,Block.checkBlocked,wishListController.removeWishList)
 
 // Cart
 user_route.post('/addToCart/:id',validate.requireAuth,Block.checkBlocked,cartController.addToCart)
 user_route.get('/cart',validate.requireAuth,Block.checkBlocked,cartController.loadCart)
-user_route.put( '/change-product-quantity',cartController.updateQuantity)
-user_route.delete("/delete-product-cart",cartController.deleteProduct)
+user_route.put( '/change-product-quantity',validate.requireAuth,Block.checkBlocked,cartController.updateQuantity)
+user_route.delete("/delete-product-cart",validate.requireAuth,Block.checkBlocked,cartController.deleteProduct)
 
 //checkOut
-user_route.get('/checkOut',orderController.checkOut)
-user_route.post('/checkOut',orderController.postCheckOut)
+user_route.get('/checkOut',validate.requireAuth,Block.checkBlocked,orderController.checkOut)
+user_route.post('/checkOut',validate.requireAuth,Block.checkBlocked,orderController.postCheckOut)
 // coupon apply
-user_route.get('/applyCoupon/:id',orderController.applyCoupon)
-user_route.get('/couponVerify/:id',orderController.verifyCoupon)
+user_route.get('/applyCoupon/:id',validate.requireAuth,Block.checkBlocked,orderController.applyCoupon)
+user_route.get('/couponVerify/:id',validate.requireAuth,Block.checkBlocked,orderController.verifyCoupon)
 
 //payement mode
-user_route.post('/verifyPayment',orderController.verifyPayment)
-user_route.post('/paymentFailed',orderController.paymentFailed)
+user_route.post('/verifyPayment',validate.requireAuth,Block.checkBlocked,orderController.verifyPayment)
+user_route.post('/paymentFailed',validate.requireAuth,Block.checkBlocked,orderController.paymentFailed)
 
 //checkOutAddress
-user_route.post('/checkOutAddress',profileController.checkOutAddress)
-user_route.post('/changeDefaultAddress',orderController.changePrimaryAddress)
+user_route.post('/checkOutAddress',validate.requireAuth,Block.checkBlocked,profileController.checkOutAddress)
+user_route.post('/changeDefaultAddress',validate.requireAuth,Block.checkBlocked,orderController.changePrimaryAddress)
 
 //Profile
 user_route.get('/dashboard',validate.requireAuth,Block.checkBlocked,profileController.loadDashboard)
 user_route.get('/profileOrderList',validate.requireAuth,Block.checkBlocked,orderController.orderList)
-user_route.get('/orderDetails',orderController.orderDetails)
-user_route.put('/cancelOrder',orderController.cancelOrder)
+user_route.get('/orderDetails',validate.requireAuth,Block.checkBlocked,orderController.orderDetails)
+user_route.put('/cancelOrder',validate.requireAuth,Block.checkBlocked,orderController.cancelOrder)
 user_route.get('/profileAddress',validate.requireAuth,Block.checkBlocked,profileController.profileAdress)
-user_route.post('/updateAddress',profileController.editAddress)
-user_route.get('/wallet',profileController.walletTransaction)
-user_route.get('/profileDetails',profileController.profile)
+user_route.post('/updateAddress',validate.requireAuth,Block.checkBlocked,profileController.editAddress)
+user_route.get('/wallet',validate.requireAuth,Block.checkBlocked,profileController.walletTransaction)
+user_route.get('/profileDetails',validate.requireAuth,Block.checkBlocked,profileController.profile)
 
 
-user_route.get('/invoice',orderController.downloadInvoice)
+user_route.get('/invoice',validate.requireAuth,Block.checkBlocked,orderController.downloadInvoice)
 module.exports = user_route ;

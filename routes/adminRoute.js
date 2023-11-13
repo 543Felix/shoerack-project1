@@ -26,25 +26,25 @@ admin_route.get('/logout',adminController.logOut)
 admin_route.get('/addProduct',validate.requireAuth,productController.loadaddProduct)
 admin_route.post('/addProduct',multer.upload,productController.createProduct)
 admin_route.get('/productsList',validate.requireAuth,productController.displayProduct)
-admin_route.get('/unListProduct',productController.unListProduct)
-admin_route.get('/reListProduct',productController.reListProduct)
+admin_route.get('/unListProduct',validate.requireAuth,productController.unListProduct)
+admin_route.get('/reListProduct',validate.requireAuth,productController.reListProduct)
 admin_route.get('/updateProduct',validate.requireAuth,productController.loadUpdateProduct)
-admin_route.post('/updateProduct',multer.update,productController.updateProduct)
+admin_route.post('/updateProduct/:id',validate.requireAuth,multer.update,productController.updateProduct)
 
 //Categories
 admin_route.get('/showCategory',validate.requireAuth,categoryController.loadCategory)
 admin_route.get('/addCategory',validate.requireAuth,categoryController.loadAddCategory)
-admin_route.post('/addCategory',categoryController.createCategory)
-admin_route.get('/unlistCategory',categoryController.unlistCategory)
-admin_route.get('/relistCategory',categoryController.relistCategory)
+admin_route.post('/addCategory',validate.requireAuth,categoryController.createCategory)
+admin_route.get('/unlistCategory',validate.requireAuth,categoryController.unlistCategory)
+admin_route.get('/relistCategory',validate.requireAuth,categoryController.relistCategory)
 admin_route.get('/updateCategory',validate.requireAuth,categoryController.loadupdateCategory)
-admin_route.post('/updateCategory',categoryController.updateCategory)
+admin_route.post('/updateCategory',validate.requireAuth,categoryController.updateCategory)
 
 
 //User
 admin_route.get('/userList',validate.requireAuth,adminController.loadUsers)
-admin_route.post('/blockUser',adminController.blockUser)
-admin_route.post('/unBlockUser',adminController.unBlockUser)
+admin_route.post('/blockUser',validate.requireAuth,adminController.blockUser)
+admin_route.post('/unBlockUser',validate.requireAuth,adminController.unBlockUser)
 
 //Order
 admin_route.get('/orderList',validate.requireAuth,adminController.orderList)

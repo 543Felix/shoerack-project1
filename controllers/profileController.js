@@ -12,6 +12,7 @@ const loadDashboard = async (req,res)=>{
 const checkOutAddress = async(req,res)=>{
     try {
         const userId = res.locals.user._id
+        console.log("checkOutAddress",userId);
     const name = req.body.name
     const mobileNumber = req.body.mno
     const address = req.body.address
@@ -54,6 +55,7 @@ const profileAdress = async (req, res) => {
     try {
       let arr = []
       const user = res.locals.user;
+      console.log("profileAddress",user);
       const address = await Address.find({user:user._id.toString()});
       if(address){
         const ad = address.forEach((x) => {

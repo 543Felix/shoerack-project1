@@ -38,6 +38,7 @@ const createCategory = async(req,res)=>{
         }
     } catch (error) {
         console.error(error.message);
+        res.status(500).json({ error: 'Failed to create category' });
     }
 }
 const loadupdateCategory = async(req,res)=>{
@@ -56,7 +57,8 @@ async function updateCategory(req,res){
     await categoryHelper.updateCategory(id,req.body)
     res.redirect('/admin/showCategory')
     } catch (error) {
-       console.error(error.message); 
+       console.error(error.message);
+       res.status(500).json({ error: 'Failed to update category' }); 
     }
 }
 const unlistCategory = async(req,res)=>{
@@ -65,6 +67,7 @@ const unlistCategory = async(req,res)=>{
     res.redirect('/admin/showCategory')
    } catch (error) {
     console.error(error.message);
+    res.status(500).json({ error: 'Failed to delete category' });
    } 
 }
 
@@ -74,6 +77,7 @@ const relistCategory = async(req,res)=>{
        res.redirect('/admin/showCategory')
     } catch (error) {
        console.error(error.message); 
+       res.status(500).json({ error: 'Failed to relist category' });
     }
 }
 module.exports={

@@ -13,7 +13,7 @@ const checkOut = async (req, res) => {
   try {
     const user = res.locals.user
     const total = await Cart.findOne({ user: user.id })
-    const address = await Address.findOne({ user: user.id }).lean().exec()
+    const address = await Address.findOne({ user: user.id.toString() }).lean().exec()
     const cart = await Cart.aggregate([
       {
         $match: { user: user.id }
@@ -75,22 +75,22 @@ const postCheckOut = async (req, res) => {
   try {
     const stock = await orderHelper.checkStock(userId)
     if (stock) {
-      if (data.paymentOption === "cod") {
-        const updateStock = await orderHelper.updateStock(userId)
-        const response = await orderHelper.placeOrder(data, userId.toString())
-        await Cart.deleteOne({ user: userId })
-        res.json({ codStatus: true });
-      } else if (data.paymentOption === "wallet") {
-        const updatedStock = await orderHelper.updateStock(userId)
-        const response = await orderHelper.placeOrder(data, userId);
-        res.json({ orderStatus: true, message: "order placed successfully" });
-        await Cart.deleteOne({ user: userId })
-      } else if (data.paymentOption === "razorpay") {
-        const response = await orderHelper.placeOrder(data, userId);
-        const order = await orderHelper.generateRazorpay(userId, data.total);
-        res.json(order);
-
-      }
+        if (data.paymentOption === "cod") {
+          const updateStock = await orderHelper.updateStock(userId)
+          const response = await orderHelper.placeOrder(data, userId.toString())
+          await Cart.deleteOne({ user: userId })
+          res.json({ codStatus: true });
+        } else if (data.paymentOption === "wallet") {
+          const updatedStock = await orderHelper.updateStock(userId)
+          const response = await orderHelper.placeOrder(data, userId);
+          res.json({ orderStatus: true, message: "order placed successfully" });
+          await Cart.deleteOne({ user: userId })
+        } else if (data.paymentOption === "razorpay") {
+          const response = await orderHelper.placeOrder(data, userId);
+          const order = await orderHelper.generateRazorpay(userId, data.total);
+          res.json(order);
+  
+        }
     } else {
       await Cart.deleteOne({ user: userId })
       res.json({ status: 'OrderFailed' });
@@ -173,7 +173,6 @@ const orderDetails = async (req, res) => {
     orderHelper.findOrder(id, user._id).then((orders) => {
       const address = orders[0].shippingAddress
       const products = orders[0].productDetails
-      console.log("orderDetails",products);
       res.render('orderDetails', { orders, address, products })
     });
   } catch (error) {

@@ -24,10 +24,10 @@ const createProduct = (data,images) => {
   
   };
 
-  const updateProduct = async (data, images) => {
+  const updateProduct = async (data, images,id) => {
     try {
         await Product.findByIdAndUpdate(
-          { _id: data.id},
+          { _id: id},
           {
             $set: {
               productName: data.productName,

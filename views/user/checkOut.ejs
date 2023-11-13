@@ -53,7 +53,7 @@
     <!--================Checkout Area =================-->
     <section class="checkout_area section_gap" style="margin-top: 80px;">
         <div class="container">
-        
+          
            
             <div class="billing_details">
                 <div class="row">
@@ -116,6 +116,7 @@
                     <div class="col-lg-4">
                     <form id="checkOut-form">
                         <div class="order_box">
+
                             <h2>Your Order</h2>
 
                             <ul class="list">
@@ -176,11 +177,13 @@
                             <%if(address[0]){%>
                             <button class="primary-btn" onclick="proceedToPayment()">Place Order</button>
                             <%}else{%>
-                                <button class="primary-btn " disabled onclick="proceedToPayment()">Place Order</button>
+                              <h4 style="color: red;">please add address</h4>
                                 <%}%>
 
 
-
+                                <% if (typeof message !== 'undefined') { %>
+                                  <h4 style="color: red;"><%= message %></h4>
+                                <% } %>
 
                         </div>
                     </form>

@@ -2,7 +2,27 @@ const Product = require('../model/productModel')
 const category = require('../model/categoryModel')
 const productHelper = require('../helper/productHelper')
 const offerHelper = require('../helper/offerHelper')
+// const multer = require('multer')
 
+
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//       cb(null, './public/productImages'); 
+//   },
+//   filename: function (req, file, cb) {
+//       const uniqueSuffix = Date.now();
+//       const ext = path.extname(file.originalname); 
+//       const filename = uniqueSuffix + ext; 
+//       cb(null, filename);
+//   },
+// });
+
+// const upload = multer({
+//   storage,
+//   limits: {
+//       fileSize: 1024 * 1024 * 5, 
+//   },
+// });
     const loadaddProduct = async(req,res)=>{
         try {
             const Category = await category.find({})
@@ -50,7 +70,7 @@ const offerHelper = require('../helper/offerHelper')
           const categories = await category.find({})
           const id = req.query.id;
           const productData = await Product.findById({_id:id}).populate('category')
-          res.render('updateProduct',{product:productData,category:categories})
+          res.render('updateProduct',{product:productData,categories:categories})
           
         } catch (error) {
           console.log(error)
@@ -60,25 +80,21 @@ const offerHelper = require('../helper/offerHelper')
 
       const updateProduct = async (req, res) => {
         try {
-    
-          const productData = await Product.findById(req.body.id)
-          const categories = await category.find({})
-          if (!req.body.productName || req.body.productName.trim().length === 0) {
-            return res.render("updateProduct", { message: "Name is required",product:productData,category:categories });
-        }
-        if (!req.body.description || req.body.description.trim().length === 0) {
-          return res.render("updateProduct", { message: "Description is required",product:productData,category:categories });
-      }
-        if(req.body.price<=0){
-          return res.render("updateProduct", { message: "Product Price Should be greater than 0",product:productData,category:categories });
-        }
-        if(req.body.stock<0 || req.body.stock.trim().length === 0 ){
-          return res.render("updateProduct", { message: "Stock Should be greater than 0",product:productData,category:categories });
-        }
-            const images = req.files.map(file => file.filename);
-            const updatedImages = images.length > 0 ? images : productData.images;
-            await productHelper.updateProduct(req.body,updatedImages)
-            await offerHelper.addOfferPriceforSingleProduct(req.body.id)
+          var existingImages = req.body.existingImages || []
+          const removedImages = req.body.removedImages || [];
+          var newImages  = []
+          for(let i=0;i<req.files.length;i++){
+            if(req.files[i]!==undefined){
+              newImages.push(req.files[i].filename)
+            }
+          }
+          const remainingImages = existingImages.filter(image => !removedImages.includes(image));
+      
+
+          const productId = req.params.id;
+             const updatedImages = newImages.concat(remainingImages)
+            await productHelper.updateProduct(req.body,updatedImages,productId)
+            await offerHelper.addOfferPriceforSingleProduct(productId)
             res.redirect('/admin/productsList');
         } catch (error) {
           console.log(error.message);
@@ -113,10 +129,12 @@ const offerHelper = require('../helper/offerHelper')
             if(product.isProductListed == true && product.isCategoryListed == true){
                 res.render('product',{product})
             }else{
-                res.redirect('shop')
+              res.redirect('/error-404')
+
             }
         } catch (error) {
            console.error(error.message); 
+           res.redirect('/error-404')
         }
        }
     module.exports={
@@ -129,3 +147,56 @@ const offerHelper = require('../helper/offerHelper')
         reListProduct,
         singleProduct
     }
+
+
+
+    const updateEditProduct = async (req, res) => {
+      try {
+          upload.array('images')(req, res, async (err) => {
+              if (err) {  
+                  console.error(err);
+                  return res.redirect('/admin');
+              }
+              var existingImages = req.body.existingImages || []
+              const removedImages = req.body.removedImages || [];
+              var newImages  = []
+              for(let i=0;i<req.files.length;i++){
+                if(req.files[i]!==undefined){
+                  newImages.push(req.files[i].filename)
+                }
+              }
+              const remainingImages = existingImages.filter(image => !removedImages.includes(image));
+          
+    
+              const productId = req.params.id;
+              const existingProduct = await Product.findById(productId);
+    
+              const category = await Category.findOne({ _id: req.body.category });
+    
+              // Check if new images are uploaded
+              // let newImageNames = existingProduct.images;
+              // if (req.files && req.files.length > 0) {
+              //     newImageNames = req.files.map((file) => path.basename(file.path));
+              // }
+    
+              const updatedProduct = await Product.findByIdAndUpdate(
+                  productId,
+                  {
+                      name: req.body.name,
+                      description: req.body.description,
+                      price: req.body.price,
+                      category: category._id,
+                      stock: req.body.stock,
+                      offerprice: req.body.offerprice,
+                      images:remainingImages.concat(newImages),
+                  },
+                  { new: true }
+              );
+    
+              res.redirect('/admin/productView');
+          });
+      } catch (error) {
+          console.error(error.message);
+          res.status(500).send('Internal Server Error');
+      }
+    };

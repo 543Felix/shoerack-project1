@@ -32,7 +32,7 @@ cb(null, true);
  const upload = multer({
    storage: storage,
    fileFilter: imageFilter
- }).array('file',3);
+ }).array('images',3);
 
  const bannerImageUpload = multer({
    storage:banneImageSrtorage,

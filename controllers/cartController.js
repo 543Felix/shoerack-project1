@@ -4,9 +4,15 @@ const wishList = require('../model/wishlistModel')
 const cartHelper = require('../helper/cartHelper')
 
 const addToCart = (req,res)=>{
-    cartHelper.addToCart(req.params.id,res.locals.user._id).then((response)=>{
-        res.send(response)
-    })
+    try {
+        cartHelper.addToCart(req.params.id,res.locals.user._id).then((response)=>{
+            res.send(response)
+        })  
+    } catch (error) {
+       console.error(error.message); 
+       res.redirect('/error-500')
+    }
+    
 }
 
 const loadCart = async (req,res)=>{
