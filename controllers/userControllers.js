@@ -6,6 +6,7 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const otpHelper = require('../helper/otpHelper')
 const userHelper = require('../helper/userHelper')
+const productHelper = require('../helper/productHelper')
 require('dotenv').config()
 const Banner = require('../model/bannerModel')
 
@@ -29,6 +30,14 @@ user_controller.use(express.json())
 //         console.error(error.message);
 //     }
 // }
+
+const errorPage = async(req,res)=>{
+  try {
+   res.render('error-404') 
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 const userHomepage = async(req, res, next) => {
     try { 
         const banner = await Banner.find({})
@@ -164,8 +173,7 @@ const verifyLogin = async(req,res)=>{
    const data = req.body
    const result = await userHelper.verifyLogin(data)
    if(result.error){
-    res.render('login')
-    console.log(result.error);
+    res.render('login',{message:"Email and password are incorrect"})
    }else{
     const token = result.token;
       res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
@@ -272,7 +280,7 @@ const shopPage = async(req,res)=>{
         
     let products
          products = await Product.find(searchFilter).populate('category');
-    
+        //  await productHelper.updateProductPage(products)
         if (!isNaN(minPrice) && !isNaN(maxPrice)) {
         products = products.filter(product => {
                 const price = product.discountedPrice > 0 ? product.discountedPrice : product.price;
@@ -280,11 +288,7 @@ const shopPage = async(req,res)=>{
             });
            
         }
-        // products = products.filter(product => {
-        //     const price = product.discountedPrice > 0 ? product.discountedPrice : product.price;
-        //     return price >= minPrice && price < maxPrice;
-        // });
-    
+       
         products.sort((a, b) => {
             const aPrice = a.discountedPrice > 0 ? a.discountedPrice : a.price;
             const bPrice = b.discountedPrice > 0 ? b.discountedPrice : b.price;
@@ -339,5 +343,6 @@ module.exports = {
     setNewPassword,
     shopPage,
     categoryPage,
+    errorPage
 };
      

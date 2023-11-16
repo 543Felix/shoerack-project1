@@ -2,7 +2,6 @@ const user = require('../model/userModel')
 const shortid = require('shortid') 
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
-
 const maxAge = 3*24*60*60*1000
 
 const createToken= (id)=>{
@@ -47,6 +46,7 @@ const verifyLogin= (data)=>{
 const generateReferalCode =async ()=>{
    return shortid.generate()
 }
+
 
 
 module.exports ={

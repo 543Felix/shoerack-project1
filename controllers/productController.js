@@ -82,6 +82,9 @@ const offerHelper = require('../helper/offerHelper')
         try {
           var existingImages = req.body.existingImages || []
           const removedImages = req.body.removedImages || [];
+          if(removedImages != []){
+            await productHelper.removeImagefromFiles(removedImages)
+          }
           var newImages  = []
           for(let i=0;i<req.files.length;i++){
             if(req.files[i]!==undefined){

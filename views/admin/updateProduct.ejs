@@ -38,9 +38,6 @@
       <div class="card-body">
           <h5 class="card-title fw-semibold mb-4">Edit Product</h5>
           <form action="/admin/updateProduct/<%= product._id %>" method="POST" enctype="multipart/form-data">
-              <div>
-                  <input  class="btn btn-primary" value="SUBMIT" type="submit"></input>
-              </div>
               <div class="mb-3">
                   <label for="productName" class="form-label">Product Name</label>
                   <input type="text" class="form-control" id="productName" name="name" value="<%= product.productName %>" required  maxlength="50">
@@ -61,9 +58,11 @@
               <div class="mb-3">
                   <label for="productCategory" class="form-label">Product Category</label>
                   <select class="form-select" id="productCategory" name="category" required>
-                      <% categories.forEach(category => { %>
-                        <option value="<%= category._id %>" <%= product.category && product.category.toString() === category._id.toString() ? 'selected' : '' %>><%= category.categoryName%></option>
-                      <% }); %>
+                    <option value="<%= product.category._id %>" selected><%= product.category.categoryName %></option>
+                    <% categories.forEach(category => { %>
+                        <!-- Add options for other categories -->
+                        <option value="<%= category._id %>" <%= product.category && product.category.toString() === category._id.toString() ? 'disabled' : '' %>><%= category.categoryName %></option>
+                    <% }); %>
                   </select>
               </div>
               <!-- <div class="mb-3">

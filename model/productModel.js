@@ -25,7 +25,7 @@ const productSchema = new mongoose.Schema({
       default:0
   },discountValidity:{
       type: Date,
-      default: new Date()
+      default: null
   },
   discountedPrice:{
     type:Number,
