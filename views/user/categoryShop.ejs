@@ -68,7 +68,16 @@
   opacity: 1;
   visibility: visible;
 }
-
+.sold-out-overlay {
+background: #654ea3;
+color: #fff;
+font-size: 14px;
+font-weight: 600;
+padding: 5px 10px;
+position: absolute;
+right: 50px;
+top: 10px;
+}
 </style>
 <body id="category">
 
@@ -115,6 +124,9 @@
             
 							<div class="single-product">
 								<a href="/product?id=<%=item._id %>">
+									<% if(item.stock === 0){ %>
+										<span class="sold-out-overlay">Sold Out</span>
+										<% } %>
 								<img style="height: 275px;" class="img-fluid" src="../productImages/<%= item.images[0]%>" >
 								<div class="product-details">
                   <small><%=item.category.categoryName%></small>

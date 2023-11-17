@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const WishList = require("../model/wishlistModel")
 const whishListHelper = require('../helper/wishListHelper')
 const { ObjectId } = mongoose.Types
+const Nodemailer = require('../controllers/nodeMailer')
 
 
 const addToCart = async (productId, userId) => {
@@ -123,6 +124,7 @@ const addToCart = async (productId, userId) => {
                             }
                                
                         } else {
+                            await Nodemailer.sendEmail(`Needed to increase the stock of ${product.productName}`)
                             resolve({status: false})
                         }
                     } else {
@@ -174,6 +176,7 @@ const addToCart = async (productId, userId) => {
                                
                             
                         } else {
+                            await Nodemailer.sendEmail(`Needed to increase the stock of ${product.productName}`)
                             resolve({ status: false })
                         }
                     }
@@ -222,6 +225,7 @@ const addToCart = async (productId, userId) => {
                             
                         
                     } else {
+                        await Nodemailer.sendEmail(`Needed to increase the stock of ${product.productName}`)
                         resolve({ status: false })
                     }
                 }
@@ -280,6 +284,7 @@ const updateQuantity = async (data) => {
                 }
             } else {
                 if (product.stock - quantity < 1 && count == 1) {
+                    await Nodemailer.sendEmail(`Needed to increase the stock of ${product.productName}`)
                     resolve({ status: 'Out of stock' })
                 } else {
                         if(discountPercentage>0){
@@ -412,9 +417,49 @@ const deleteProduct = async (data) => {
         console.error(error.message);
     }
 }
+
+const updateSingleProduct = async (id)=>{
+    const Id = new  ObjectId(id)
+    const product = await Product.findOne({_id:Id})
+    const cartProduct =  await Cart.aggregate([
+        {$unwind:"$cartItems"},
+        {$match:{"cartItems.productId":Id}},
+        {$project:{cartItems:1,cartTotal:1}}
+    ])
+    if(cartProduct !==null){
+        for (const item of cartProduct){
+            const total = item.cartItems.total
+            const quantity = item.cartItems.quantity
+            const cartTotal = item.cartTotal
+            const updatedCartTotal = cartTotal-total
+            if(product.discountedPrice ===0 && (product.price*quantity)!==total){
+              const updatedCart =  await Cart.updateOne({"cartItems.productId":Id,"cartItems.total":total},
+                {$set:
+                {
+                "cartItems.$.total":product.price*quantity,
+                "cartTotal":updatedCartTotal+(product.price*quantity),
+                "cartItems.$.discountedPrice":0
+            }
+            })
+            }
+            else if(product.discountedPrice >0 && (product.discountedPrice*quantity) !== total){
+
+                const updatedCart =  await Cart.updateOne({"cartItems.productId":Id,"cartItems.total":total},
+                {$set:
+                {
+                "cartItems.$.total":product.discountedPrice,
+                "cartTotal":updatedCartTotal+(product.discountedPrice*quantity),
+                "cartItems.$.discountedPrice":product.discountedPrice
+            }
+            })
+            }
+        }
+    }
+}
 module.exports = {
     addToCart,
     getCartCount,
     updateQuantity,
-    deleteProduct
+    deleteProduct,
+    updateSingleProduct
 }

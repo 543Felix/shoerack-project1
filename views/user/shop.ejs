@@ -40,6 +40,16 @@
   text-decoration:  line-through;
   color: red;
 }
+.sold-out-overlay {
+background: #654ea3;
+color: #fff;
+font-size: 14px;
+font-weight: 600;
+padding: 5px 10px;
+position: absolute;
+right: 50px;
+top: 10px;
+}
   </style>
 </head>
 
@@ -107,8 +117,10 @@
 
                     <div class="single-product" >
                       <a href="/product?id=<%=item._id %>">
-                        <img class="img-fluid" style="height: 275px;" src="../productImages/<%= item.images[0]%>"  alt=""> 
-                          
+                        <% if(item.stock === 0){ %>
+                          <span class="sold-out-overlay">Sold Out</span>
+                          <% } %>
+                        <img class="img-fluid" style="height: 275px;" src="../productImages/<%= item.images[0]%>"  alt="">  
                       </a>
                       <div class="product-details">
                         <small>

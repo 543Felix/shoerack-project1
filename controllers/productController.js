@@ -2,27 +2,7 @@ const Product = require('../model/productModel')
 const category = require('../model/categoryModel')
 const productHelper = require('../helper/productHelper')
 const offerHelper = require('../helper/offerHelper')
-// const multer = require('multer')
-
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//       cb(null, './public/productImages'); 
-//   },
-//   filename: function (req, file, cb) {
-//       const uniqueSuffix = Date.now();
-//       const ext = path.extname(file.originalname); 
-//       const filename = uniqueSuffix + ext; 
-//       cb(null, filename);
-//   },
-// });
-
-// const upload = multer({
-//   storage,
-//   limits: {
-//       fileSize: 1024 * 1024 * 5, 
-//   },
-// });
+const cartHelper = require('../helper/cartHelper')
     const loadaddProduct = async(req,res)=>{
         try {
             const Category = await category.find({})
@@ -95,9 +75,13 @@ const offerHelper = require('../helper/offerHelper')
       
 
           const productId = req.params.id;
+          const product = await Product.find({_id:productId})
              const updatedImages = newImages.concat(remainingImages)
             await productHelper.updateProduct(req.body,updatedImages,productId)
-            await offerHelper.addOfferPriceforSingleProduct(productId)
+            if(product[0].price !== req.body.price){
+              await offerHelper.addOfferPriceforSingleProduct(productId)
+             await cartHelper.updateSingleProduct(productId)
+            }
             res.redirect('/admin/productsList');
         } catch (error) {
           console.log(error.message);
