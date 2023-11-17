@@ -11,7 +11,6 @@ const profileController = require('../controllers/profileController')
 
 
 user_route.set('views','./views/user')
-
 user_route.all('*',validate.checkUser)
 
 // user_route.get('/banner',usercontroller.banner)

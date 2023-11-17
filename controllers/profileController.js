@@ -48,7 +48,7 @@ const profile = async (req, res) => {
     res.render("profileDetails", { user, arr });
   } catch (error) {
     console.log(error.message);
-    res.redirect('/error-500')
+    res.redirect('/error-405')
   }
 };
 const profileAdress = async (req, res) => {
