@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const WishList = require("../model/wishlistModel")
 const whishListHelper = require('../helper/wishListHelper')
 const { ObjectId } = mongoose.Types
-const Nodemailer = require('../controllers/nodeMailer')
+const Nodemailer = require('../controllers/Mailer')
 
 
 const addToCart = async (productId, userId) => {
