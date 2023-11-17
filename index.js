@@ -30,7 +30,7 @@ const userRoute = require('./routes/userRoute')
 app.use('/',userRoute)
 const adminRoute=require('./routes/adminRoute')
 app.use('/admin',adminRoute)
-app.use('/',userController.errorPage)
+app.use('*',userController.errorPage)
 
 
 app.listen(3001,()=>{
