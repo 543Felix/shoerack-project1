@@ -72,5 +72,11 @@ user_route.get('/wallet',validate.requireAuth,Block.checkBlocked,profileControll
 user_route.get('/profileDetails',validate.requireAuth,Block.checkBlocked,profileController.profile)
 
 
+//error
+
+user_route.all('*',usercontroller.error404)
+user_route.get('/error-403',usercontroller.error403)
+user_route.get('/error-500',usercontroller.error500)
+
 user_route.get('/invoice',validate.requireAuth,Block.checkBlocked,orderController.downloadInvoice)
 module.exports = user_route ;

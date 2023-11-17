@@ -21,29 +21,16 @@ const createToken = (id) => {
 const user_controller = express.Router()
 user_controller.use(express.json())
 
-// const banner = async (req,res)=>{
-//     try {
-//         const banner = await Banner.find({})
-//         console.log("banner",banner[0].image);
-//        res.render('banner',{banner}) 
-//     } catch (error) {
-//         console.error(error.message);
-//     }
-// }
 
-const errorPage = async(req,res)=>{
-  try {
-   res.render('error-404') 
-  } catch (error) {
-    console.error(error.message);
-  }
-}
+
+
 const userHomepage = async(req, res, next) => {
     try { 
         const banner = await Banner.find({})
         res.render('homepage',{banner})
     } catch (error) {
        console.error(error.message);
+       res.redirect('/error-500')
     }
 };
 
@@ -56,6 +43,7 @@ const userLogin=async(req,res,next)=>{
         } 
     } catch (error) {
        console.error(error.message); 
+       res.redirect('/error-500')
     }
 }
 const registration=async(req,res,next)=>{
@@ -67,6 +55,7 @@ try {
     }
 } catch (error) {
     console.error(error.message);
+    res.redirect('/error-500')
 }
 }
 
@@ -100,7 +89,7 @@ const insertUser = async(req,res)=>{
         res.render('verifyotp')
     } catch (error) {
         console.log(error.message);
-       
+        res.redirect('/error-500')
  
     }
 }
@@ -166,6 +155,7 @@ const verifyOtp = async(req,res)=>{
 
     } catch (error) {
         console.log(error.message);
+        res.redirect('/error-500')
      
     }
 }
@@ -187,13 +177,15 @@ const logout = (req,res)=>{
         res.redirect('/login')
     } catch (error) {
         console.error(error.message);
+        res.redirect('/error-500')
     }
 }
 const forgetPassword = async(req,res)=>{
     try {
       res.render('forgetPassword')  
     } catch (error) {
-      console.error(error.message);  
+      console.error(error.message); 
+      res.redirect('/error-500') 
     }
 }
 
@@ -231,6 +223,7 @@ const resetPasswordOtpVerify = async (req,res)  => {
         }
     }catch(error){
         console.log(error);
+        res.redirect('/error-500')
     }
 }
 
@@ -298,6 +291,7 @@ const shopPage = async(req,res)=>{
         res.render('shop', { product: products, category });
     } catch (error) {
         console.error(error.message);
+        res.redirect('/error-500')
     }
     
     
@@ -327,8 +321,38 @@ const categoryPage = async(req,res)=>{
        res.render('categoryShop',{product,category,categoryId})
     } catch (error) {
       console.error(error.message);  
+      res.redirect('/error-500')
     }
 }
+
+const error404 = async(req,res)=>{
+    try {
+      res.render('errorPages/error-404')
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  }
+  const error403 = async(req,res)=>{
+    try {
+      res.render('errorPages/error-403')
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  }
+  
+  const error500 = async(req,res)=>{
+    try {
+      res.render('errorPages/error-500')
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  }
 module.exports = {
     userHomepage,
     userLogin,
@@ -343,6 +367,8 @@ module.exports = {
     setNewPassword,
     shopPage,
     categoryPage,
-    errorPage
+    error404,
+    error403,
+    error500
 };
      

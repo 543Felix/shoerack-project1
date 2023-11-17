@@ -5,7 +5,8 @@ const loadDashboard = async (req,res)=>{
     try {
       res.render('dashboard')  
     } catch (error) {
-        
+      console.error(error.message);
+      res.redirect('/error-500')
     }
 }
 
@@ -37,6 +38,7 @@ const checkOutAddress = async(req,res)=>{
     res.redirect('/checkOut')
     } catch (error) {
        console.error(error.message); 
+       res.redirect('/error-500')
     }
     
 }
@@ -48,7 +50,7 @@ const profile = async (req, res) => {
     res.render("profileDetails", { user, arr });
   } catch (error) {
     console.log(error.message);
-    res.redirect('/error-405')
+    res.redirect('/error-500')
   }
 };
 const profileAdress = async (req, res) => {
@@ -66,6 +68,7 @@ const profileAdress = async (req, res) => {
       
     } catch (error) {
       console.log(error.message);
+      res.redirect('/error-500')
     }
   };
 
