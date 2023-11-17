@@ -16,12 +16,12 @@ config.connectDb()
 
 
  app.set('view engine','ejs')
- app.set('views',"./views/user/errorPages")
 app.use(session({
     secret: 'your-secret-key', 
     resave: false,
     saveUninitialized: true
 }))
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname,'public')))
@@ -30,7 +30,6 @@ const userRoute = require('./routes/userRoute')
 app.use('/',userRoute)
 const adminRoute=require('./routes/adminRoute')
 app.use('/admin',adminRoute)
-app.use('*',userController.errorPage)
 
 
 app.listen(3001,()=>{
