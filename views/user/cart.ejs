@@ -223,16 +223,8 @@
                   success: (response) => {
                     console.log(response.status,'ll');
                     if (response.status) {
-                      socket.emit('updateCart', response.cartData);
 
-      // Handle cart updates received from the Socket.io server
-      socket.on('cartUpdated', (updatedCartData) => {
-        // Check if the updated cartData is for the current user's cart
-        if (updatedCartData.userId === userId) {
-          // Update the UI based on the received updatedCartData
-          console.log('Cart updated:', updatedCartData);
-        }
-      });
+      
                       location.reload()
       
                     }
@@ -258,16 +250,8 @@
                   const subTotalVal = document.querySelector(`#subTotal-${proId}`);
                   subTotalVal.innerHTML ='₹' + response.newSubTotal;
                   document.getElementById('total').innerHTML ='₹ ' +response.cartTotal;
-                  socket.emit('updateCart', response.cartData);
 
-// Handle cart updates received from the Socket.io server
-socket.on('cartUpdated', (updatedCartData) => {
-  // Check if the updated cartData is for the current user's cart
-  if (updatedCartData.userId === userId) {
-    // Update the UI based on the received updatedCartData
-    console.log('Cart updated:', updatedCartData);
-  }
-});
+
                 }
                 
                 else if(response.status=='Out of stock'){

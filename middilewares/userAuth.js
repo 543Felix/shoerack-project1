@@ -4,6 +4,8 @@ require('dotenv').config()
 
 const requireAuth = (req,res,next)=>{
     const token = req.cookies.jwt
+    console.log('token = ',token)
+    console.log('req method ',req.method)
     if(token){
         jwt.verify(token,process.env.JWT_SECRET_KEY,(err,decodedToken)=>{
             if(err){
@@ -13,7 +15,12 @@ const requireAuth = (req,res,next)=>{
             }
         })
     } else{
-        res.redirect('/login')
+        
+        if(req.method==='POST'){
+            return res.status(401).json({messag:'please login to add to cart'})
+        }else{
+            res.redirect('/login')
+        }
     }
 }
 

@@ -241,11 +241,16 @@
           <span id="nameError"></span>
           <input type="tel" class="popup-form__input" placeholder="Mobile Number" name="mno" id="mno">
           <span id="mnoError"></span>
-          <textarea class="popup-form__input" placeholder="House Address" name="address" id="address"></textarea>
+          <input type="text" class="popup-form__input" placeholder="House Address" name="address" id="address">
+          <span id="addressError"></span>
           <input type="text" class="popup-form__input" placeholder="City" name="city" id="city">
+          <span id="cityError"></span>
           <input type="text" class="popup-form__input" placeholder="Street" name="locality" id="locality">
+          <span id="localityError"></span>
           <input type="text" class="popup-form__input" placeholder="PostalCode/PIN" name="pincode" id="pincode">
+          <span id="pincodeError"></span>
           <input type="text" class="popup-form__input" placeholder="State" name="state" id="state">
+          <span id="stateError"></span>
           <button type="submit" id="btn" class="popup-form__submit">ADD</button>
       </form>
   </div>
@@ -253,7 +258,7 @@
 
 
 <script>
-  function validateForm() {
+
       const name = document.getElementById("name").value.trim();
       const mobileNumber = document.getElementById("mno").value.trim();
       const address = document.getElementById("address").value.trim();
@@ -262,51 +267,135 @@
       const pincode = document.getElementById("pincode").value.trim();
       const state = document.getElementById("state").value.trim();
 
+     const nameError = document.getElementById("nameError")
+     const mnoError = document.getElementById("mnoError")
+     const addressError = document.getElementById("addressError")
+     const cityError = document.getElementById("cityError")
+     const localityError = document.getElementById("localityError")
+     const pincodeError = document.getElementById("pincodeError")
+     const stateError = document.getElementById("stateError")
+
       // Check if the name is not empty
-      if (name === "") {
-        alert("Please enter valid Name");
-          return false;
+      function nameValidation(){
+        const nameRegex = /^[A-Za-z]+$/;
+        if (name === "") {
+        nameError.innerHTML = 'name cannot be empty',
+        nameError.style.color = 'red',
+        nameError.style.border = "solid 2px red"
+        return false
+      }else if(!name.match(nameRegex)){
+        nameError.innerHTML = 'first letter should be capital',
+        nameError.style.color = 'red',
+        nameError.style.border = "solid 2px red"
+        return false
+      }else{
+        nameError.innerHTML = '',
+        nameError.style.color = 'green',
+        nameError.style.border = "solid 2px green"
+        return true
       }
+      }
+      
 
       // Check if the mobile number is a valid number with at least 10 digits
-      if (isNaN(mobileNumber) || mobileNumber.length < 10) {
-        alert("Please enter valid mobile Number .");
-          return false;
+      function mobileValidation(){
+        if (isNaN(mobileNumber) || mobileNumber.length < 10) {
+        mnoError.innerHTML = 'Please enter valid mobile Number .',
+        mnoError.style.color = 'red',
+        mnoError.style.border = 'solid 2px red'
+        return false
+      }else{
+        mnoError.innerHTML = '',
+        mnoError.style.color = 'green',
+        mnoError.style.border = 'solid 2px green'
+        return true
       }
+      }
+      
 
       // Check if the address is not empty
-      if (address === "") {
-          alert("Please enter your house address.");
-          return false;
+      function addresValidation(){
+        if (address === "") {
+          addressError.innerHTML = 'Please enter your house address.',
+          addressError.style.color = 'red',
+          addressError.style.border = 'solid 2px red'
+          return false
+      }else{
+        addressError.innerHTML = '',
+          addressError.style.color = 'green',
+          addressError.style.border = 'solid 2px green'
+          return true
       }
+      }
+      
 
       // Check if the city is not empty
-      if (city === "") {
-          alert("Please enter your city.");
-          return false;
+      function cityValidation(){
+        if (city === "") {
+          cityError.innerHTML = 'Please enter your city',
+          cityError.style.color = 'red',
+          cityError.style.border = 'solid 2px red'
+          return false
+      }else{
+        cityError.innerHTML = '',
+          cityError.style.color = 'green',
+          cityError.style.border = 'solid 2px green'
+          return true
       }
+      }
+      
 
       // Check if the street/locality is not empty
-      if (locality === "") {
-          alert("Please enter your street/locality.");
+      function localityValidation(){
+        if (locality === "") {
+          localityError.innerHTML = 'Please enter your street/locality.',
+          localityError.style.color = 'red',
+          localityError.style.border = 'solid 2px red'
           return false;
+      }else{
+        localityError.innerHTML = '',
+        localityError.style.color = 'green',
+        localityError.style.border = 'solid 2px green'
+        return true;
       }
+      }
+      
+      
 
       // Check if the postal code/PIN is not empty and is a valid number
-      if (pincode === "" || isNaN(pincode)) {
-          alert("Please enter a valid postal code/PIN.");
+      function pincodeValidation(){
+        if (pincode === "" || isNaN(pincode)) {
+          pincodeError.innerHTML = 'Please enter a valid postal code/PIN.',
+          pincodeError.style.color = 'red',
+          pincodeError.style.border = 'solid 2px red'
           return false;
+      }else{
+        pincodeError.innerHTML = '',
+        pincodeError.style.color = 'green',
+        pincodeError.style.border = 'solid 2px green'
+        return true;
       }
+      }
+      
 
       // Check if the state is not empty
-      if (state === "") {
-          alert("Please enter your state.");
+      function stateValidation(){
+        if (state === "") {
+          stateError.innerHTML = 'Please enter your state.',
+          stateError.style.color = 'red',
+          stateError.style.border = 'solid 2px red'
           return false;
+      }else{
+        stateError.innerHTML = '',
+        stateError.style.color = 'green',
+        stateError.style.border = 'solid 2px green'
+        return true;
+      }
+      }
+      function validateForm() {
+        
       }
 
-      // If all validations pass, the form will be submitted
-      return true;
-  }
 </script>
 
 

@@ -32,7 +32,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
-<style>
+<!-- <style>
 	/* Keep your existing CSS styles */
 	.img_zoom_container {
 	  position: relative;
@@ -72,7 +72,171 @@
 	  transition: transform 0.9s ease-in-out;
 	  transform-origin: center center;
 	}
-  </style>
+  </style> -->
+
+<style>
+	@mixin aspect-ratio($width, $height) {
+	  position: relative;
+
+	  &:before {
+		display: block;
+		content: "";
+		width: 100%;
+		padding-top: ($height / $width) * 100%;
+	  }
+
+	  > img {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		width: 100%;
+		height: 100%;
+	  }
+	}
+
+	// Styling
+
+	section {
+	  background: #F4F4F4;
+	  padding: 50px 0;
+	}
+
+	.new_container {
+	  max-width: 400px;
+	  margin: 0 ;
+	  padding: 0 20px;
+	}
+
+	.carousel {
+	  display: block;
+	  text-align: left;
+	  position: relative;
+	  margin-bottom: 22px;
+
+	  > input {
+		clip: rect(1px, 1px, 1px, 1px);
+		clip-path: inset(50%);
+		height: 1px;
+		width: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+
+		  <% for (let i = 0; i < product.images.length; i++) { %>
+      &:nth-of-type(<%= i + 1 %>):checked ~ .carousel__slides .carousel__slide:first-of-type {
+        margin-left: <%= -i * 100 %>%;
+      }
+
+      &:nth-of-type(<%= i + 1 %>):checked ~ .carousel__thumbnails li:nth-of-type(<%= i + 1 %>) {
+        box-shadow: 0px 0px 0px 5px rgba(0, 0, 255, 0.5);
+		margin:5px;
+      }
+    <% } %>
+	  }
+	}
+
+	.carousel__slides {
+	  position: relative;
+	  z-index: 1;
+	  padding: 0;
+	  margin: 0;
+	  overflow: hidden;
+	  white-space: nowrap;
+	  box-sizing: border-box;
+	  display: flex;
+	}
+
+	.carousel__slide {
+	  position: relative;
+	  display: flex;
+	  flex: 1 0 100%;
+	  overflow: hidden;
+	  transition: all 300ms ease-out;
+	  vertical-align: top;
+	  box-sizing: border-box;
+	  white-space: normal;
+
+	  figure {
+		display: flex;
+		margin: 0;
+	  }
+
+	  div {
+		@include aspect-ratio(3, 2);
+		width: 100%;
+	  }
+
+	  img {
+		display: block;
+		flex: 1 1 auto;
+		object-fit: cover;
+	  }
+
+	  figcaption {
+		align-self: flex-end;
+		padding: 20px 20px 0 20px;
+		flex: 0 0 auto;
+		width: 25%;
+		min-width: 150px;
+	  }
+
+	  .credit {
+		margin-top: 1rem;
+		color: rgba(0, 0, 0, 0.5);
+		display: block;
+	  }
+
+	  &.scrollable {
+		overflow-y: scroll;
+	  }
+	}
+
+	.carousel__thumbnails {
+	  list-style: none;
+	  padding: 0;
+	  margin: 0;
+	  display: flex;
+
+	  margin: 0 -10px;
+
+	  .carousel__slides + & {
+		margin-top: 20px;
+	  }
+
+	  li {
+		flex: 1 1 auto;
+		max-width: calc((100% / 6) - 20px);
+		margin: 0 10px;
+		transition: all 300ms ease-in-out;
+	  }
+
+	  label {
+		display: block;
+		@include aspect-ratio(1,1);
+
+		&:hover,
+		&:focus {
+		  cursor: pointer;
+
+		  img {
+			box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.25);
+			transition: all 300ms ease-in-out;
+		  }
+		}
+	  }
+
+	  img {
+		display: block;
+		object-fit: cover;
+	  }
+	  body {
+margin: 0;
+}
+	}
+</style>
 </head>
 <body>
     <%- include('../layouts/header.ejs') %>
@@ -82,24 +246,36 @@
 		<div class="container">
 			<div class="row s_product_inner">
 				<div class="col-lg-6">
-					<div class="s_Product_carousel">
-						<div class="single-prd-item img_zoom_container"  >
-							<figure class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)">
-							<img class="img-fluid" src="../productImages/<%= product.images[0]%>" alt="">
-						</figure>
-
-						</div>
-						<div class="single-prd-item">
-							<figure class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)">
-							<img class="img-fluid" src="../productImages/<%= product.images[1]%>" alt="">
-						</figure>
-
-						</div>
-						<div class="single-prd-item">
-							<figure class="zoom" onmousemove="zoom(event)" onmouseout="resetZoom(event)">
-							<img class="img-fluid" src="../productImages/<%= product.images[2]%>" alt="">
-						</figure>
-
+					<div class="new_container">
+						<div class="carousel">
+							<!-- Input radio buttons for each slide -->
+							<% product.images.forEach((image, index) => { %>
+								<input type="radio" name="slides" <%= index === 0 ? 'checked' : '' %> id="slide-<%= index + 1 %>">
+							<% }); %>
+					
+							<!-- Carousel slides -->
+							<ul class="carousel__slides">
+								<% product.images.forEach((image, index) => { %>
+									<li class="carousel__slide">
+										<figure>
+											<div>
+												<img style="width: 370px;height: 390px;" src="../productImages/<%= product.images[index] %>" alt="">
+											</div>
+										</figure>
+									</li>
+								<% }); %>
+							</ul>
+					
+							<!-- Thumbnails -->
+							<ul class="carousel__thumbnails">
+								<% product.images.forEach((image, index) => { %>
+									<li>
+										<label for="slide-<%= index + 1 %>">
+											<img style="width: 50px;" src="../productImages/<%= product.images[index] %>" alt="">
+										</label>
+									</li>
+								<% }); %>
+							</ul>
 						</div>
 					</div>
                     
@@ -172,7 +348,23 @@
 			  });
 	
 			}
-		  }
+		  },error: (jqXHR, textStatus, errorThrown) => {
+			Swal.fire({
+    title: 'Warning',
+    text: 'Please log in to add this product to your whishList.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Login',
+    cancelButtonText: 'Cancel'
+}).then((result) => {
+    if (result.isConfirmed) {
+        // Redirect to the login page
+        window.location.href = '/login';
+    }
+});
+
+        console.error('AJAX error:', textStatus, errorThrown);
+    }
 		})
 	  }
 	
@@ -196,8 +388,9 @@
 
 <script src="../users/js/main.js"></script>
 <script>
-    function addtocart(proId) {
-      $.ajax({
+     function addtocart(proId) {
+		try {
+			$.ajax({
         url: '/addToCart/' + proId,
         method: 'POST',
         success: (response) => {
@@ -216,27 +409,57 @@
               icon: 'error',
               timer: 5000
             })
-          }
-        }
+          }else{
+			// console.log('response = ',response)
+		  }
+        },
+		error: (jqXHR, textStatus, errorThrown) => {
+			Swal.fire({
+    title: 'Warning',
+    text: 'Please log in to add this product to your cart.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Login',
+    cancelButtonText: 'Cancel'
+}).then((result) => {
+    if (result.isConfirmed) {
+        // Redirect to the login page
+        window.location.href = '/login';
+    }
+});
+
+    }
       })
+		} catch (error) {
+		}
+     
     }
 </script>
 
 <script>
-function zoom(event) {
-  var zoomer = event.currentTarget;
-  var offsetX = event.offsetX ? event.offsetX : event.touches[0].pageX;
-  var offsetY = event.offsetY ? event.offsetY : event.touches[0].pageY;
-  var x = (offsetX / zoomer.offsetWidth) * 100;
-  var y = (offsetY / zoomer.offsetHeight) * 100;
-  zoomer.querySelector('img').style.transform = 'scale(2)';
-  zoomer.querySelector('img').style.transformOrigin = x + '% ' + y + '%';
-}
-
-function resetZoom(event) {
-  var zoomer = event.currentTarget;
-  zoomer.querySelector('img').style.transform = 'none';
-  }
-</script>
+	document.addEventListener('DOMContentLoaded', function () {
+	  // Get all elements with the class 'zoom-effect'
+	  const zoomContainers = document.querySelectorAll('.zoom-effect');
+  
+	  // Add event listeners to each zoom container
+	  zoomContainers.forEach((container) => {
+		container.addEventListener('mouseover', handleZoomIn);
+		container.addEventListener('mouseout', handleZoomOut);
+	  });
+  
+	  // Function to handle zoom in
+	  function handleZoomIn(event) {
+		const imgZoom = event.currentTarget.querySelector('.img_zoom');
+		imgZoom.style.transform = 'scale(2)';
+	  }
+  
+	  // Function to handle zoom out
+	  function handleZoomOut(event) {
+		const imgZoom = event.currentTarget.querySelector('.img_zoom');
+		imgZoom.style.transform = 'scale(1)';
+	  }
+	});
+  </script>
+  
 </body>
 </html>

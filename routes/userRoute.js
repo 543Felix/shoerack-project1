@@ -24,7 +24,7 @@ user_route.post('/verifyotp',usercontroller.verifyOtp)
 user_route.get('/logout',usercontroller.logout)
 
 //Forget password
-user_route.get('/forgetPassword',usercontroller.forgetPassword)
+user_route.get('/forgetPassword',validate.requireAuth,usercontroller.forgetPassword)
 user_route.post('/forgetPasswordOtp',usercontroller.forgetPasswordOtp)
 user_route.post('/forgotPassword',usercontroller.resetPasswordOtpVerify)
 user_route.post('/setNewPassword',usercontroller.setNewPassword)
@@ -74,9 +74,9 @@ user_route.get('/profileDetails',validate.requireAuth,Block.checkBlocked,profile
 
 //error
 
-user_route.all('*',usercontroller.error404)
-user_route.get('/error-403',usercontroller.error403)
-user_route.get('/error-500',usercontroller.error500)
+// user_route.all('*',usercontroller.error404)
+// user_route.get('/error-403',usercontroller.error403)
+// user_route.get('/error-500',usercontroller.error500)
 
 user_route.get('/invoice',validate.requireAuth,Block.checkBlocked,orderController.downloadInvoice)
 module.exports = user_route ;
