@@ -1,37 +1,36 @@
-const express = require('express')
-const cookieParser = require('cookie-parser') 
-const session = require('express-session')
-const config = require('./config/mongoDb')
-const ejs = require('ejs')
-const app = express()
-const path = require('path')
-const userController = require('./controllers/userControllers')
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const config = require('./config/mongoDb');
+const path = require('path');
+const userRoute = require('./routes/userRoute');
+const adminRoute = require('./routes/adminRoute');
 
+const app = express();
 
+// Database connection
+config.connectDb();
 
-config.connectDb()
+// Set view engine to EJS
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); 
 
-
-
-
-
- app.set('view engine','ejs')
+// Middleware
+app.use(cookieParser());
 app.use(session({
-    secret: 'your-secret-key', 
+    secret: process.env.SESSION_SECRET || 'your-secret-key', 
     resave: false,
     saveUninitialized: true
-}))
-
-app.use(express.json())
+}));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname,'public')))
-app.use(cookieParser())
-const userRoute = require('./routes/userRoute')
-app.use('/',userRoute)
-const adminRoute=require('./routes/adminRoute')
-app.use('/admin',adminRoute)
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Routes
+app.use('/', userRoute);
+app.use('/admin', adminRoute);
 
-app.listen(3001,()=>{
-    console.log("server is running on the url http://localhost:3001");
-})
+// Start server
+app.listen(3001, () => {
+    console.log("Server is running on http://localhost:3001");
+});
